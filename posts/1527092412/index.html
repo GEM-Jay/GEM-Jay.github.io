@@ -1,0 +1,745 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>博客部署SSL证书教程，带你搞懂HTTPS - zargo</title>
+
+  
+    <meta name="description" content="前言最近在做自己的博客，发现部署在自己的服务器上后，是HTTP协议的站点，作为小白，查询了很多文件和资料，成功将HTTP的站点变更为了HTTPS。 不过在这背后，关于HTTPS的相关知识我想能够全部记录下来，本文整合了自己在学习过程中查询到的资料，希望能够帮助到大家。 需要查看如何在Nignx上部署SSL证书的可以直接跳转在Nignx上部署SSL证书。 本文尝试从 HTTP 开始，一步一步深入到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博客部署SSL证书教程，带你搞懂HTTPS">
+<meta property="og:url" content="http://zargo.site/posts/1527092412/index.html">
+<meta property="og:site_name" content="zargo">
+<meta property="og:description" content="前言最近在做自己的博客，发现部署在自己的服务器上后，是HTTP协议的站点，作为小白，查询了很多文件和资料，成功将HTTP的站点变更为了HTTPS。 不过在这背后，关于HTTPS的相关知识我想能够全部记录下来，本文整合了自己在学习过程中查询到的资料，希望能够帮助到大家。 需要查看如何在Nignx上部署SSL证书的可以直接跳转在Nignx上部署SSL证书。 本文尝试从 HTTP 开始，一步一步深入到">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221800080.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221807238.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808236.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808264.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808648.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809371.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809332.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814709.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814264.png">
+<meta property="article:published_time" content="2024-10-22T08:53:38.000Z">
+<meta property="article:modified_time" content="2024-10-22T10:31:09.141Z">
+<meta property="article:author" content="zaogao">
+<meta property="article:tag" content="技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221800080.png">
+  
+  
+  
+  <meta name="keywords" content="Zargo,zaogao">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410171102674.ico">
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221551645.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">zargo</div><div class="sub normal cap">blog of zaogao in SZU</div><div class="sub hover cap" style="opacity:0"> 枣糕同学的个人博客</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="博客" href="/" style="color:#1BCDFC"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M5.879 2.879C5 3.757 5 5.172 5 8v8c0 2.828 0 4.243.879 5.121C6.757 22 8.172 22 11 22h2c2.828 0 4.243 0 5.121-.879C19 20.243 19 18.828 19 16V8c0-2.828 0-4.243-.879-5.121C17.243 2 15.828 2 13 2h-2c-2.828 0-4.243 0-5.121.879M8.25 17a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75M9 12.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5zM8.25 9A.75.75 0 0 1 9 8.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 9" clip-rule="evenodd"/><path fill="currentColor" d="M5.235 4.058C5 4.941 5 6.177 5 8v8c0 1.823 0 3.058.235 3.942L5 19.924c-.975-.096-1.631-.313-2.121-.803C2 18.243 2 16.828 2 14v-4c0-2.829 0-4.243.879-5.121c.49-.49 1.146-.707 2.121-.803zm13.53 15.884C19 19.058 19 17.822 19 16V8c0-1.823 0-3.059-.235-3.942l.235.018c.975.096 1.631.313 2.121.803C22 5.757 22 7.17 22 9.999v4c0 2.83 0 4.243-.879 5.122c-.49.49-1.146.707-2.121.803z" opacity=".5"/></svg></a><a class="nav-item" title="文档" href="/wiki/" style="color:#3DC550"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M14.25 4.48v3.057c0 .111 0 .27.02.406a.936.936 0 0 0 .445.683a.96.96 0 0 0 .783.072c.13-.04.272-.108.378-.159L17 8.005l1.124.534c.106.05.248.119.378.16a.958.958 0 0 0 .783-.073a.936.936 0 0 0 .444-.683c.021-.136.021-.295.021-.406V3.031c.113-.005.224-.01.332-.013C21.154 2.98 22 3.86 22 4.933v11.21c0 1.112-.906 2.01-2.015 2.08c-.97.06-2.108.179-2.985.41c-1.082.286-1.99 1.068-3.373 1.436c-.626.167-1.324.257-1.627.323V5.174c.32-.079 1.382-.203 1.674-.371c.184-.107.377-.216.576-.323m5.478 8.338a.75.75 0 0 1-.546.91l-4 1a.75.75 0 0 1-.364-1.456l4-1a.75.75 0 0 1 .91.546" clip-rule="evenodd"/><path fill="currentColor" d="M18.25 3.151c-.62.073-1.23.18-1.75.336a8.2 8.2 0 0 0-.75.27v3.182l.75-.356l.008-.005a1.13 1.13 0 0 1 .492-.13c.047 0 .094.004.138.01c.175.029.315.1.354.12l.009.005l.749.356V3.647z"/><path fill="currentColor" d="M12 5.214c-.334-.064-1.057-.161-1.718-.339C8.938 4.515 8.05 3.765 7 3.487c-.887-.234-2.041-.352-3.018-.412C2.886 3.007 2 3.9 2 4.998v11.146c0 1.11.906 2.01 2.015 2.079c.97.06 2.108.179 2.985.41c.486.129 1.216.431 1.873.726c1.005.451 2.052.797 3.127 1.034z" opacity=".5"/><path fill="currentColor" d="M4.273 12.818a.75.75 0 0 1 .91-.545l4 1a.75.75 0 1 1-.365 1.455l-4-1a.75.75 0 0 1-.545-.91m.909-4.545a.75.75 0 1 0-.364 1.455l4 1a.75.75 0 0 0 .364-1.455z"/></svg></a><a class="nav-item" title="社交" href="/about/" style="color:#F44336"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m13.629 20.472l-.542.916c-.483.816-1.69.816-2.174 0l-.542-.916c-.42-.71-.63-1.066-.968-1.262c-.338-.197-.763-.204-1.613-.219c-1.256-.021-2.043-.098-2.703-.372a5 5 0 0 1-2.706-2.706C2 14.995 2 13.83 2 11.5v-1c0-3.273 0-4.91.737-6.112a5 5 0 0 1 1.65-1.651C5.59 2 7.228 2 10.5 2h3c3.273 0 4.91 0 6.113.737a5 5 0 0 1 1.65 1.65C22 5.59 22 7.228 22 10.5v1c0 2.33 0 3.495-.38 4.413a5 5 0 0 1-2.707 2.706c-.66.274-1.447.35-2.703.372c-.85.015-1.275.022-1.613.219c-.338.196-.548.551-.968 1.262" opacity=".5"/><path fill="currentColor" d="M10.99 14.308c-1.327-.978-3.49-2.84-3.49-4.593c0-2.677 2.475-3.677 4.5-1.609c2.025-2.068 4.5-1.068 4.5 1.609c0 1.752-2.163 3.615-3.49 4.593c-.454.335-.681.502-1.01.502c-.329 0-.556-.167-1.01-.502"/></svg></a></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1527092412/"><span class="title">博客部署SSL证书教程，带你搞懂HTTPS</span></a><a class="item title" href="/posts/4114488392/"><span class="title">Blog主题美化-sakura</span></a><a class="item title" href="/posts/3422505860/"><span class="title">算法—马拦过河卒</span></a><a class="item title" href="/posts/3615288770/"><span class="title">算法—贪婪算法之田忌赛马</span></a><a class="item title" href="/posts/3151518252/"><span class="title">算法—贪婪算法之背包问题</span></a><a class="item title" href="/posts/502788320/"><span class="title">算法—矩阵连乘</span></a><a class="item title" href="/posts/2945491289/"><span class="title">算法—矩阵最长滑翔路径</span></a><a class="item title" href="/posts/3256024956/"><span class="title">算法—数字地图</span></a></div></widget>
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/GEM-Jay" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/08a41b181ce68.svg"/></a><a class="social" href="https://music.163.com/#/user/home?id=455842388" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/3845874.svg"/></a><a class="social" href="tencent://message/?uin=2646421291&Site=&Menu=yes" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410171111745.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/942ebbf1a4b91.svg"/></a></div></footer>
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-10-22T08:53:38.000Z">2024-10-22</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2024-10-22T10:31:09.141Z">2024-10-22</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>博客部署SSL证书教程，带你搞懂HTTPS</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在做自己的博客，发现部署在自己的服务器上后，是HTTP协议的站点，作为小白，查询了很多文件和资料，成功将HTTP的站点变更为了HTTPS。</p>
+<p>不过在这背后，关于HTTPS的相关知识我想能够全部记录下来，本文整合了自己在学习过程中查询到的资料，希望能够帮助到大家。</p>
+<p>需要查看如何在Nignx上部署SSL证书的可以直接跳转<a href="#%E5%9C%A8Nignx%E4%B8%8A%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6">在Nignx上部署SSL证书</a>。</p>
+<p>本文尝试从 HTTP 开始，一步一步深入到 HTTPS，告诉你 HTTPS 到底是什么、为什么需要 HTTPS、以及 HTTPS 到底是怎么做的。相信你在阅读完本文后，一定会对 HTTPS 有深入的了解。</p>
+<p>好了，废话不多说，直接进入正题吧。</p>
+<p>什么是 HTTPS ?一句话，<strong>HTTPS &#x3D; HTTP + SSL</strong>。HTTPS 并不是一个全新的协议，而是在 HTTP 的基础上，通过 SSL 增加了一层加密协议，从而大大增加了 HTTP 协议的安全性。</p>
+<p>所以在正式了解 HTTPS 之前，我们需要先了解 HTTP。</p>
+<h2 id="1-HTTP"><a href="#1-HTTP" class="headerlink" title="1.HTTP"></a>1.HTTP</h2><p>HTTP 全称 超文本传输协议（HyperText Transfer Protocol），是一种广泛用于互联网中浏览器与服务器之间的应用层传输协议。简单来说，浏览器向服务器发送 HTTP 请求，服务器向浏览器返回 HTTP 响应，两者之间通过这种方式进行“交流”，来使得我们的浏览器可以正常从服务器端获取数据，并展示在用户的电脑屏幕上.</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221800080.png" alt="HTTP过程"></p>
+<p>以访问 <a target="_blank" rel="noopener" href="http://httpbin.org/">http://httpbin.org</a> 网址为例，一个典型的 HTTP 请求如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Accept: text/html,...</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Host: httpbin.org</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.366</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>GET 表示请求方法，常见的 HTTP 请求方法有 GET、POST、PUT、DELETE 等…</li>
+<li>GET 后面的 &#x2F;表示请求路径，这里我们访问的根路径，所以显示为 &#x2F;。如果你访问 httpbin.org&#x2F;get 的话，这里显示的就是 &#x2F;get了</li>
+<li>HTTP&#x2F;1.1 表示使用的 HTTP 协议版本，现在常用的有 HTTP&#x2F;1.1 和 HTTP&#x2F;2，当然还有更先进的 HTTP&#x2F;3，这里就不过多展开了</li>
+<li>下面的 9 行全部都是 HTTP header，每一个 header 包含 name 和 value，之间用冒号分隔开。</li>
+</ul>
+<p>一个典型的 HTTP 响应如下所示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Sat, 08 Apr 2023 16:28:43 GMT</span><br><span class="line">Content-Type: text/html; charset=utf-8</span><br><span class="line">Content-Length: 9593</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Server: gunicorn/19.9.0</span><br><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line"></span><br><span class="line">body...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>HTTP&#x2F;1.1 指的协议版本，响应和请求的协议版本是一致的</li>
+<li>200 OK 代表返回的响应码，表示这个响应是符合预期的。另外还有非常常见的返回码 404 NOT FOUND ，大家应该或多或少听说过，它表示服务器告诉你你访问的这个资源不存在</li>
+<li>后面 7 行全部是 HTTP header，同样每一个 header 包含 name 和 value，之间用冒号分隔开。</li>
+<li>最后是 HTTP Body，也就是响应体，即服务器返回给你的内容主体，浏览器正是根据响应体来渲染页面的</li>
+</ul>
+<p>由于本文重点不在 HTTP，这里不再详细介绍各个部分的作用</p>
+<h2 id="2-为什么需要HTTPS"><a href="#2-为什么需要HTTPS" class="headerlink" title="2.为什么需要HTTPS"></a>2.为什么需要HTTPS</h2><p>我们知道，HTTP （除了最新的 HTTP&#x2F;3 外），传输层是基于 TCP 协议的。TCP 建立连接时，有三次握手。三次握手完毕之后，TCP 连接就顺利建立了，接下来两端将会传输数据。</p>
+<p>对于普通的 HTTP 协议，在建立完 TCP 连接之后，就直接开始传输数据了，这时候数据是明文传输的，这也是 HTTP 最不安全的地方。</p>
+<p>明文传输是什么概念呢？</p>
+<p>我们知道，浏览器和服务器之间，是存在很长一条路线的，你在家里通过浏览器访问网页的时候，数据会从你的电脑，传到你家里的路由器，再到光猫，到运营商，到互联网…直到最后才到服务器。在明文传输下，理论上来讲，浏览器和服务器之间的任一节点，包括你家里的路由器、包括你购买宽带&#x2F;流量的运营商，都可以“窃听”你们的数据，甚至还可以修改数据。</p>
+<p>听起来不够直观？</p>
+<p>打个比方，近代时期，战场上打仗时，部队之间会通过电台进行交流。如果通过明文进行交流，那么非常危险，敌军可以打开电台进行窃听，偷取你的军事情报，这样的事也屡见不鲜了…那么他们是如何解决这个问题的呢？</p>
+<p>两个部队之间提前约定一个加密的方案，在传数据之前，先把它进行加密再传输，另一端收到数据之后，按照事先约定的方案进行解密，然后读取就可以了。这样即使敌军开始窃听，也只能听到加密后的情报，如果无法对其破解的话，得不到任何有效信息。</p>
+<p>没错，这就是 HTTPS 的思想，浏览器在发送 HTTP 请求之前，先通过某种方式对其进行加密，然后再进行传输。服务器端收到数据之后，对其解密，读取真实内容，生成 HTTP 响应，同样对响应进行加密，然后传回给浏览器，浏览器收到数据之后，对其进行解密，得到真正的 HTTP 响应。这样就可以保证数据在传输过程中的安全性，无论是路由器还是运营商，都没有办法“窃听”你们的数据了。</p>
+<p>说到这里，想必你已经知道 HTTPS 的一大作用了，它可以保证数据在互联网上传输的安全性，避免中间节点进行窃听和修改。</p>
+<p>当然，聪明的你还可能会想到一些问题，例如：</p>
+<ul>
+<li><p>战场上军队之间是提前约定好加密方案的，但是咱们任意一个浏览器都可以随时访问网页，没有办法提前约定加密方案呀，那是怎么做到的呢？</p>
+</li>
+<li><p>战场上经常出现敌军对另一方部队之间的电台加密进行破解的事情，破解完成之后，还是能够窃听到数据，那 HTTPS 的这个加密方案到底安全吗，会被破解吗？</p>
+</li>
+</ul>
+<p>这些问题，你都可以在本文中得到答案。</p>
+<h2 id="3-HTTP-SSL-HTTPS-！"><a href="#3-HTTP-SSL-HTTPS-！" class="headerlink" title="3. HTTP + SSL &#x3D; HTTPS ！"></a>3. HTTP + SSL &#x3D; HTTPS ！</h2><p>上面提到了对 HTTP 进行加密的思想。在 HTTPS 的具体实现中，这个加密方案即是大名鼎鼎的 SSL（Secure Sockets Layer）。</p>
+<p>定义：SSL（Secure Sockets Layer）是一种安全协议，用于在互联网上保护数据的传输安全。它工作在传输层，主要功能是通过加密技术，保护不同计算机之间的数据传输过程，防止敏感数据被黑客窃取和篡改。SSL 协议可以用于保护网站的用户登录、信用卡支付、网上银行等敏感信息的传输，以及企业之间的机密数据的传输。SSL 协议目前已经被继承为 TLS（Transport Layer Security），是一种安全性更高的传输层协议。所以，下面我将统一以 TLS 为名称进行讲解。</p>
+<p>首先，划重点，TLS 中有 Transport Layer，顾名思义，它一定是工作在传输层了。上面提到过，HTTP 是应用层协议，传输层和应用层的概念，想必大家应该知道吧，计算机网络的事实标准中，自顶向下可以分为五层：应用层、传输层、网络层、链路层、物理层…这是《计算机网络》的基础，这里不过多展开，不熟悉的同学，要回去重修一下课程了。</p>
+<p>我们知道，TCP 协议里有三次握手，三次握手成功后连接才算建立，接下来才会真正开始传输数据。传统的 HTTP 协议中，三次握手成功之后，就会直接开始明文传输 HTTP 数据了。</p>
+<p>那么 TLS 是什么时候开始发挥作用的呢？答案很简单，在三次握手之后，传输数据之前。</p>
+<p>也就是说，在 TCP 协议中加入 TLS 之后，三次握手成功之后就不会再立刻开始传输数据了，而是紧接着开始 TLS 的建立过程，也被称为 TLS 握手。</p>
+<p>TLS 握手是干嘛呢？或者说为什么需要 TLS 握手呢？上面提到，在战场上，两个部队之间会提前约定好加密的方案，例如面对面用纸互相写下加密方案，然后在一段时间之内的电台通信统一用这个加密方案，这样能一定程度上保证电台通信的安全性。但是 TLS 中我们并没有这样一个“面对面”的机会，咱们总不可能在访问网页之前，人肉跑到服务器的维护者那边去跟他约定加密方案吧。出于这个目的，TLS 握手便出现了。所以我们可以说，TLS 握手的目的是给通信双方约定一个安全的加密方案（可以理解为商量一个只有双方知道的加密密钥）。</p>
+<p>知道了 TLS 握手的目的，接下来我们需要知道它具体是怎么做的。首先，我们肯定不能直接明文传输加密方案（密钥），不然这个密钥在传输过程中就直接被第三方获取了，那么加密将没有任何意义。也就是说，TLS 握手需要做到：<strong>通信双方可以约定一个共同的加密方案（密钥），并且这个约定的过程（即 TLS 握手过程），即使被任何第三方窃听到，也无法解析出这个加密方案（密钥）</strong>。</p>
+<p>是不是听起来很神奇，那到底是怎么做到的呢？这就不得不提到密码学中非常经典的两个概念：对称加密和非对称加密。</p>
+<h2 id="4-对称加密，非对称加密"><a href="#4-对称加密，非对称加密" class="headerlink" title="4.对称加密，非对称加密"></a>4.对称加密，非对称加密</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221807238.png" alt="对称加密"></p>
+<p>对称加密是 TLS 握手成功后，通信双方之间采用的数据加密方案。现在的主要问题是：通信双方如何安全的商量好这个对称密钥，防止密钥被其他人窃取？</p>
+<p>这时就需要轮到非对称加密出场了。什么是非对称加密呢？与对称加密不同，非对称加密方案中，用户手握两把密钥，一把称为公钥，一把称为私钥，其中公&#x2F;私钥都可以用来加密&#x2F;解密数据，但是：<strong>用公钥加密后的数据，只有用私钥才能将其解开；用私钥加密后的数据，只有用公钥才能将其解开！</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808236.png" alt="非对称加密"></p>
+<p>这里只介绍了非对称加密的特点，并没有介绍其原理，因为这属于密码学的范畴了，展开来讲又是一篇文章。简单说说其思想吧，目前流行的非对称加密算法 RSA 基于的原理其实就一句话：我们目前还没有很好的办法对一个很大的数做因式分解，例如你在心里默默想一个很大的质数 p 和 质数 q，算出其乘积 n，那么向外公开 n 的话，外部人员是很难找出 p 和 q 的（只能暴力尝试，而当这样的数够大够多的时候，以现在的计算机算力也需要几百上千年的时间才能破解了）。对密码学感兴趣的同学，可自行进一步了解。</p>
+<p>有了非对称加密，事情就变得有意思起来了。见下图，服务器端用非对称加密方案生成一对公&#x2F;私钥，私钥掌握在自己手里，谁也不告诉；在 TLS 握手的过程中，服务器将自己的公钥交给浏览器端，浏览器端在心里默默想出一个对称加密的密钥后，将这个密钥用服务器端的公钥进行加密，然后再传回给浏览器端；浏览器端收到这个数据之后，用自己的私钥将其进行解密，就能够得到刚才浏览器心里默念的那个对称密钥了。这样这个问题就完美的解决了，两边可以心有灵犀的拿到这个对称密钥，而不用担心被任何第三方窃取到了。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808264.png" alt="TLS过程模拟"></p>
+<p>这就是 TLS 握手的过程吗？不，当然没这么简单了，我们还没有考虑一个非常巧妙的攻击手段：中间人攻击。</p>
+<h2 id="5-中间人攻击"><a href="#5-中间人攻击" class="headerlink" title="5.中间人攻击"></a>5.中间人攻击</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808648.png" alt="中间人攻击"></p>
+<p>假设现在我们从电脑上访问百度，如果有一个中间人在我的路由器端，或者运营商端，或者任何一个中间节点上截取了我的请求，刚不是提到服务器端需要返回给我们公钥吗，中间人他自己也生成一套公&#x2F;私钥，然后将自己的公钥返回给我，这样我就与中间人之间建立了一条我以为“安全”的连接了，此时我以为我连接的是百度服务器，其实我连接的是中间人…那么此时中间人可以做任何事情了，如果他人品比较好的话，他可以默默当一个代理，我要访问百度，他就去帮我访问百度，然后把结果返回给我，勤勤恳恳做一个“中间商”。当然，我们知道做这种攻击的人人品往往不会太好，所以他们可以做更坏的事情，例如伪造一个银行网页返回给我，让我填写账号和密码，这样的话…后果就不堪设想了。</p>
+<p>那么如何防止中间人攻击呢？其中的核心就是：<strong>我们需要保证我们访问的就是目标服务器，例如，当我们访问百度时，我们需要确保在 TLS 握手时，给我们公钥的人就是百度，而不是任何其他人。</strong></p>
+<p>那么这个应该如何去保证呢？这就不得不提到接下来的几个概念了，数字证书，以及证书权威机构（Certificate Authority，简称 CA）。</p>
+<h2 id="6-数字证书、CA"><a href="#6-数字证书、CA" class="headerlink" title="6.数字证书、CA"></a>6.数字证书、CA</h2><p>数字证书是由证书权威机构（CA）颁发的一个用于证明身份的证书，当然其中还包含了该用户的公钥等信息。例如还是以百度为例，假设百度需要给 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 这个域名申请一个数字证书，他需要在生成公钥&#x2F;私钥后，将自身的信息（包括域名、公司名称、公钥信息等）发给某个证书权威机构（CA），让 CA 给自己颁发一个数字证书。CA 需要验证百度的真实身份，并且他确实拥有 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 这个域名，一切都验证通过后，CA 才会给百度颁发这么一个数字证书。那么之后，不管是谁用浏览器访问 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 的时候，百度都会将刚才那个 CA 颁发的数字证书发送给用户，既可以用来自证身份，同时还顺便告诉了用户自己的公钥。</p>
+<p>到这里你可能还会有几个疑问：</p>
+<div class="tag-plugin colorful note" ><div class="body"><ul><li>数字证书如何保证不能伪造呢，难道中间人不能伪造一个数字证书发送给用户吗？</li><li>即使数字证书不能被伪造，从概念上看他是公开的，难道中间人不能直接把这个证书颁发给用户吗？</li></ul></div></div>
+
+<p>下面会一一回答这几个问题。正式回答之前，先来看看数字证书里究竟有哪些内容。</p>
+<p>既然上面提到百度，我们就以百度为例，我们使用浏览器访问百度，可以在地址栏左边看到一个小锁，点击后，就可以查看百度的数字证书</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809371.png" alt="百度安全证书1"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809332.png" alt="百度安全证书2"></p>
+<p>图中可以看到该证书的一些基本信息：</p>
+<ul>
+<li>颁发对象：这个证书是颁发给百度的，并且只对域名 (www.)baidu.com 有效</li>
+<li>颁发者：这个证书是由 GlobalSign 颁发的。（GlobalSign是一家全球知名的证书权威机构）</li>
+<li>有效期：这个证书的有效期是从 2022 年 7 月到 2023 年 8 月。（一旦过期，证书将不被信任）</li>
+<li>指纹：指纹是整张证书经过哈希计算后得到的特征值，主要与后面会提到的签名一起工作，起到防篡改的作用</li>
+</ul>
+<p>当然，一张数字证书的内容远远不止于此，例如还包含了服务器的公钥，可以在“详细信息”中进行查看。</p>
+<p>下面我们在证书详细信息中点击“导出”，将证书导出为 Base64 编码的单一证书，然后使用 openssl 对其进行解析和查看</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">$ openssl x509 -noout -text -in baidu.com.cer</span><br><span class="line">Certificate:</span><br><span class="line">    Data:</span><br><span class="line">        Version: 3 (0x2)</span><br><span class="line">        Serial Number:</span><br><span class="line">            44:17:ce:86:ef:82:ec:69:21:cc:6f:68</span><br><span class="line">    Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">        Issuer: C=BE, O=GlobalSign nv-sa, CN=GlobalSign RSA OV SSL CA 2018</span><br><span class="line">        Validity</span><br><span class="line">            Not Before: Jul  5 05:16:02 2022 GMT</span><br><span class="line">            Not After : Aug  6 05:16:01 2023 GMT</span><br><span class="line">        Subject: C=CN, ST=beijing, L=beijing, OU=service operation department, O=Beijing Baidu Netcom Science Technology Co., Ltd, CN=baidu.com</span><br><span class="line">        Subject Public Key Info:</span><br><span class="line">            Public Key Algorithm: rsaEncryption</span><br><span class="line">                RSA Public-Key: (2048 bit)</span><br><span class="line">                Modulus:</span><br><span class="line">                    00:aa:2f:cc:41:8d:25:ae:83:e9:f4:27:c4:00:b3:</span><br><span class="line">                    39:6f:0e:98:2a:55:7d:07:e5:80:49:82:fa:d3:d3:</span><br><span class="line">                    85:98:b5:df:7b:6f:bb:02:dd:ed:78:e4:0c:07:2b:</span><br><span class="line">                    9e:1e:86:4b:f6:6a:86:58:d7:57:6f:21:59:11:d8:</span><br><span class="line">                    6f:96:6e:d2:de:36:28:f6:b4:e3:ce:95:32:29:00:</span><br><span class="line">                    c1:65:8e:69:b0:00:fe:52:37:f4:88:3f:8b:6d:0f:</span><br><span class="line">                    bb:f0:ec:c5:c0:31:ef:ad:b5:0c:06:66:ad:be:dc:</span><br><span class="line">                    43:13:c4:66:b0:5d:cf:56:53:e2:d1:96:82:1c:06:</span><br><span class="line">                    bb:9b:5f:ed:60:8d:d2:ed:f3:d2:50:ee:bb:cd:b2:</span><br><span class="line">                    36:97:c8:ce:7b:d2:4b:b7:5c:b4:88:ca:37:6e:8b:</span><br><span class="line">                    ce:f9:96:fd:b4:f5:47:b5:20:77:bb:fc:a8:9d:81:</span><br><span class="line">                    b2:6c:f8:c7:09:6a:dd:22:6e:83:3f:a7:53:df:f1:</span><br><span class="line">                    da:2f:29:6b:22:c3:e9:1d:65:e8:c5:a0:ba:13:4e:</span><br><span class="line">                    16:3f:03:93:f0:a5:59:8a:1a:80:e8:27:7d:49:23:</span><br><span class="line">                    df:d1:f9:4b:97:b7:01:c4:19:f5:f1:c5:ff:91:33:</span><br><span class="line">                    d0:a1:74:c6:ee:d4:cf:f6:38:0c:ed:bd:5e:aa:44:</span><br><span class="line">                    fb:88:f7:7b:99:70:76:34:55:7e:55:d2:0f:9e:bf:</span><br><span class="line">                    94:93</span><br><span class="line">                    </span><br><span class="line">  	... (中间省略）</span><br><span class="line">   </span><br><span class="line">    Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">         63:21:07:23:47:06:eb:b3:7c:77:6c:df:bc:55:12:b9:f1:5e:</span><br><span class="line">         6a:04:60:16:be:d0:0b:18:9c:94:0c:a8:82:08:25:0d:26:fb:</span><br><span class="line">         dd:cb:fc:8c:27:d9:0c:fa:4a:b6:31:b6:67:f0:26:2c:0d:96:</span><br><span class="line">         96:39:65:3f:d9:a1:ee:de:9c:10:4d:54:e1:c8:d6:a9:0e:77:</span><br><span class="line">         db:00:e2:37:e3:3f:b4:9c:31:4f:ac:74:d3:22:12:53:36:d0:</span><br><span class="line">         ef:18:07:2d:8e:d0:e6:91:b2:6c:4a:5e:39:53:14:58:4e:d1:</span><br><span class="line">         50:04:c9:83:7e:0d:7b:15:96:87:11:d7:5d:4a:17:ac:aa:9f:</span><br><span class="line">         84:e3:a8:24:9d:d6:17:77:26:8c:9f:7a:7b:18:da:39:2f:77:</span><br><span class="line">         f7:2b:c7:23:b8:97:6f:c3:d1:72:4c:7e:fc:c6:0d:cc:73:38:</span><br><span class="line">         19:81:fb:e7:c1:7a:e8:b9:1d:3a:05:dc:36:04:9b:f1:f0:e1:</span><br><span class="line">         a6:47:a0:30:4f:55:90:6c:da:cf:9e:b2:76:12:11:a1:5c:b6:</span><br><span class="line">         61:8d:15:a4:68:65:9a:57:2f:7a:6e:a3:1f:f5:b4:92:5a:3c:</span><br><span class="line">         df:71:0a:cd:57:d4:d0:15:36:7e:ba:d5:03:25:27:45:b4:60:</span><br><span class="line">         cd:2e:02:c1:0f:0a:e7:41:6f:58:69:20:9e:ad:47:52:1a:b5:</span><br><span class="line">         e6:e5:8d:1d</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，除了上面 Chrome 里显示的一些基本信息外，证书里还包含了几个重要信息：</p>
+<ul>
+<li>服务器端的公钥，即上面 RSA Public-Key 下面的那一长串数字，就是百度的公钥了。</li>
+<li>签名，证明数字证书有效的关键信息。如果把数字证书类比成一张合同的话，我们知道合同需要老板签字才算有效，同样，数字证书是需要 CA 签名才算有效的，这里的一长串字符就是 CA 对该证书的“签名”了。</li>
+</ul>
+<p>我们知道合同上的签名是靠笔迹鉴定来确认真伪的，很明显这一长串字符里没有笔迹，那它是如何保证该签名是 CA 颁发的，而不是被其他人伪造的呢？</p>
+<p>上面我们提到，每一张数字证书有一个指纹，是将整张证书经过哈希运算后得到的特征值。CA 作为权威机构，其本身也是有一对公钥&#x2F;私钥的，它在颁发数字证书的时候，会用自己的私钥对证书的指纹进行加密，生成的这段加密数据，就是该证书的签名了！那么我们浏览器是如何验证证书的真伪呢？我们只需要使用 CA 的公钥对签名进行解密，看看得到的值是不是跟证书的指纹是一样的，这样就 OK 了，只要是一样，说明这个证书一定是 CA 颁发的。</p>
+<p>那么，又有问题来了：我们浏览器是从哪里拿到 CA 的公钥呢？总不能还是通过网络传输吧，这样就有“套娃”的中间人攻击风险了。所以啊，我们的浏览器或操作系统已经内置了世界权威的 CA 的数字证书（证书里就包含了其公钥）了，点击浏览器的 设置 -&gt; 隐私设置和安全性 -&gt; 安全 -&gt; 管理设备证书，可以查看当前系统内置的所有 CA 证书。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814709.png" alt="CA证书"></p>
+<p>上图是我的电脑中内置的 CA 证书。刚刚提到了百度的数字证书是由 GlobalSign 颁发的，这里也可以验证，GlobalSign 是被我们的操作系统所信任的 CA，并且我们已经将它的证书内置在操作系统中了。因此现在我们可以认定说，这个证书是值得信任的，与我们建立连接的就是百度，不是别人。</p>
+<p>你可能会想，如果中间人将百度真实的数字证书返回给我呢？中间人是没有百度的私钥的，所以当我们提取出证书中的公钥，并对心里想的密钥进行加密后，中间人是解不开这个密钥的，所以中间人无论如何也无法与我们建立连接。</p>
+<p>好了，数字证书的内容已经全部讲述完毕了，最后回过头来复习下前面提到的两个问题：</p>
+<div class="tag-plugin colorful note" ><div class="body"><ol><li>数字证书如何保证自身不会被伪造？</li></ol><p>数字证书中有一段签名，该签名是 CA 使用其私钥对证书指纹进行加密后得到的值，我们浏览器使用 CA 的公钥对该签名进行解密后，与该证书的指纹进行对比，就可以知道证书是否被篡改或者伪造了。</p><p>当然，这里要多提一嘴，我们作为客户端，需要保证自己的电脑里保存的都是值得信任的 CA 根证书，因为信任某 CA 就代表信任了该 CA 颁发的所有数字证书，如果有人&#x2F;软件想在你的电脑里安装来历不明的 CA 证书，那你就要保持警惕了…</p><ol start="2"><li>如果中间人直接把真实的数字证书返回给我，它能够成功与我建立连接吗？</li></ol><p>答案是不行的。这个问题其实比较简单，刚刚提到，服务器端除了公钥外，自身还保存有一份私钥的，而中间人是拿不到这个私钥的，因为它被服务器雪藏起来，不会发送到互联网中的…那么如果中间人用服务器的证书返回给用户，用户采用服务器的公钥对自身默念出来的对称密钥进行加密后，返回给中间人的时候，中间人就一脸懵逼了，因为这个密钥它解不开呀，它没有私钥的，所以这个问题就完美解决了。</p></div></div>
+
+
+<h2 id="7-TLS握手的具体过程"><a href="#7-TLS握手的具体过程" class="headerlink" title="7.TLS握手的具体过程"></a>7.TLS握手的具体过程</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814264.png" alt="TLS握手过程"></p>
+<p>上图来自 <a target="_blank" rel="noopener" href="http://www.ssl.com/">www.ssl.com</a> ，展示了整个握手流程，我用大白话解释一下：</p>
+<p>客户端向服务器发送 Client Hello 信息，告知自己想要建立一条 TLS 连接，并告知自己支持的加密算法。</p>
+<p>服务器向客户端发送一个 Server Hello 的回应，并选择一个加密算法，同时给客户端发送自己的数字证书（包含服务器的公钥）。</p>
+<p>客户端验证服务器发来的数字证书，验证通过后，在心里默默想出一个 pre-master 密钥（预主密钥），然后使用服务器的公钥，将预主密钥进行加密后，发送给服务器。<br>服务器用自己的私钥进行解密，得到预主密钥。</p>
+<p>客户端和服务器都通过预主密钥，进行相同的计算后，得到后续通信时使用的对称加密密钥，称为 shared secret。</p>
+<p>客户端和服务器端都分别用生成的 shared-secret 加密一段报文后，发送给对方，以验证对方能够成功收到信息并解密。</p>
+<p>然后 TLS 就建立成功了，接下来双方都用这个 shared-secret 进行加密通信。</p>
+<p>总结一下，HTTPS 的加密过程中其实既用到了非对称加密也用到了对称加密，其中握手过程使用的是非对称加密，主要目的是双方可以安全的协商一个统一的密钥，而真正的数据传输过程则使用的是对称加密，正是使用刚才商量的这个密钥。</p>
+<p>你可能会问，为什么不全程使用非对称加密呢？因为对称加密效率更高，尤其是在大量数据的时候，对称加密比非对称加密整整快几个数量级，所以真正数据传输的过程选用了对称加密。</p>
+<p>到这里，HTTPS 的原理就已经全部介绍完毕了。大家如果还有什么疑问，欢迎在评论区留言讨论。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最后，我们总结一下，HTTPS 解决了两个问题：</p>
+<ul>
+<li>数据传输过程中的安全问题，因为它对数据进行了加密，只有浏览器和服务器可以对其进行解密。</li>
+<li>浏览器对服务器的信任问题，数字证书以及其中的数字签名，保证了我们访问的就是我们想要访问的服务器，不可能被钓鱼网站欺骗，也不可能被中间人攻击所欺骗。</li>
+</ul>
+<p>当然，保证以上安全的前提是我们的电脑本身没有被攻破，如果你的电脑被黑客攻击，装上了来历不明的根证书，那么 HTTPS 也不能保障你的安全了。</p>
+<h2 id="在Nignx上部署SSL证书"><a href="#在Nignx上部署SSL证书" class="headerlink" title="在Nignx上部署SSL证书"></a>在Nignx上部署SSL证书</h2>
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">Older</div><a href="/posts/1286363648/">Redis的数据类型</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body waline'>
+      
+
+<div id="waline_container" class="waline_thread"><svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs15">Blog</span><a href="/">Rencent Update</a><a href="/categories">Categories</a><a href="/tags">Tags</a><a href="/archives">Archives</a></div><div class="sitemap-group"><span class="fs15">Projects</span><a href="/">Open source library</a></div><div class="sitemap-group"><span class="fs15">Social</span><a href="/about/#comments">Comments</a></div><div class="sitemap-group"><span class="fs15">More</span><a href="/about">About</a><a target="_blank" rel="noopener" href="https://github.com/GEM-Jay">GitHub</a></div></div><div class="text"><p>本站由 <a href="/">zaogao</a>创建。<br>本博客所有文章除特别声明外，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="auto"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-HTTP"><span class="toc-text">1.HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81HTTPS"><span class="toc-text">2.为什么需要HTTPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-HTTP-SSL-HTTPS-%EF%BC%81"><span class="toc-text">3. HTTP + SSL &#x3D; HTTPS ！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%EF%BC%8C%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="toc-text">4.对称加密，非对称加密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB"><span class="toc-text">5.中间人攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E3%80%81CA"><span class="toc-text">6.数字证书、CA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-TLS%E6%8F%A1%E6%89%8B%E7%9A%84%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B"><span class="toc-text">7.TLS握手的具体过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8Nignx%E4%B8%8A%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6"><span class="toc-text">在Nignx上部署SSL证书</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>Scroll to Top</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>Join Discussion</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221551645.jpg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  import { init } from 'https://gcore.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.js';
+
+  const el = document.getElementById('waline_container');
+  util.viewportLazyload(el, load_waline, true);
+
+  function load_waline(){
+    if (!el) return;
+
+    utils.css('https://gcore.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.css');
+    utils.css('https://gcore.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline-meta.css');
+
+    const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
+    const waline = init(Object.assign({"js":"https://gcore.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.js","css":"https://gcore.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.css","meta_css":"https://gcore.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline-meta.css","serverURL":"wwaline-repository.vercel.app","commentCount":true,"pageview":false}, {
+      el: '#waline_container',
+      path: path,
+      
+    }));
+  }
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
