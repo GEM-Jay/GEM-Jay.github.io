@@ -27,26 +27,26 @@
 <meta property="og:site_name" content="zargo">
 <meta property="og:description" content="前言最近在做自己的博客，发现部署在自己的服务器上后，是HTTP协议的站点，作为小白，查询了很多文件和资料，成功将HTTP的站点变更为了HTTPS。 不过在这背后，关于HTTPS的相关知识我想能够全部记录下来，本文整合了自己在学习过程中查询到的资料，希望能够帮助到大家。 需要查看如何在Nignx上部署SSL证书的可以直接跳转在Nignx上部署SSL证书。 本文尝试从 HTTP 开始，一步一步深入到">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221800080.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221807238.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808236.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808264.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808648.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809371.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809332.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814709.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814264.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231146786.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231151095.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231154147.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231159137.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231202295.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221800080.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221807238.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221808236.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221808264.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221808648.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221809371.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221809332.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221814709.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221814264.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231146786.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231151095.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231154147.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231159137.png">
+<meta property="og:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231202295.png">
 <meta property="article:published_time" content="2024-10-22T08:53:38.000Z">
-<meta property="article:modified_time" content="2024-10-23T04:04:14.330Z">
+<meta property="article:modified_time" content="2025-03-08T10:03:59.003Z">
 <meta property="article:author" content="zaogao">
 <meta property="article:tag" content="技术">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221800080.png">
+<meta name="twitter:image" content="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221800080.png">
   
   
   
@@ -58,7 +58,7 @@
   <link rel="stylesheet" href="/css/main.css?v=1.29.1">
 
   
-    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410171102674.ico">
+    <link rel="shortcut icon" href="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410171102674.ico">
   
 
   
@@ -81,7 +81,7 @@
 <div class="widgets">
 
 
-<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/posts/3557321101/"><span class="title">抽象类/内部类和接口</span></a><a class="item title" href="/posts/3891389522/"><span class="title">多态/包/final/权限修饰符和代码块</span></a><a class="item title" href="/posts/620348626/"><span class="title">static和继承</span></a><a class="item title" href="/posts/2681060841/"><span class="title">集合&学生管理系统</span></a><a class="item title" href="/posts/3822765128/"><span class="title">常用API</span></a><a class="item title" href="/posts/1189031682/"><span class="title">面向对象综合训练</span></a><a class="item title" href="/posts/673421965/"><span class="title">面向对象</span></a><a class="item title" href="/posts/2514530103/"><span class="title">综合练习</span></a></div></widget>
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1527092412/"><span class="title">博客部署SSL证书教程，带你搞懂HTTPS</span></a><a class="item title" href="/posts/4114488392/"><span class="title">Blog主题美化-sakura</span></a><a class="item title" href="/posts/896528036/"><span class="title">Maven的下载与环境配置(Windows)</span></a><a class="item title" href="/posts/56575920/"><span class="title">用JAVA实现银行家算法</span></a><a class="item title" href="/posts/3352780266/"><span class="title">关于Waline部署在Vercel上无法正常加载的解决方案</span></a><a class="item title" href="/posts/2083461370/"><span class="title">算法—加密字符串相似度计算</span></a><a class="item title" href="/posts/3835304321/"><span class="title">算法—动态规划算法求收花生问题</span></a><a class="item title" href="/posts/2646402340/"><span class="title">算法—动态规划算法求最长公共子序列问题</span></a></div></widget>
 </div>
 <footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/GEM-Jay" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/08a41b181ce68.svg"/></a><a class="social" href="https://music.163.com/#/user/home?id=455842388" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/3845874.svg"/></a><a class="social" href="tencent://message/?uin=2646421291&Site=&Menu=yes" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410171111745.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/942ebbf1a4b91.svg"/></a></div></footer>
 </div></aside><div class="l_main" id="main">
@@ -94,7 +94,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-10-22T08:53:38.000Z">2024-10-22</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2024-10-23T04:04:14.330Z">2024-10-23</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-10-22T08:53:38.000Z">2024-10-22</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-03-08T10:03:59.003Z">2025-03-08</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -113,7 +113,7 @@
 <p>什么是 HTTPS ?一句话，<strong>HTTPS &#x3D; HTTP + SSL</strong>。HTTPS 并不是一个全新的协议，而是在 HTTP 的基础上，通过 SSL 增加了一层加密协议，从而大大增加了 HTTP 协议的安全性。</p>
 <p>所以在正式了解 HTTPS 之前，我们需要先了解 HTTP。</p>
 <h2 id="1-HTTP"><a href="#1-HTTP" class="headerlink" title="1.HTTP"></a>1.HTTP</h2><p>HTTP 全称 超文本传输协议（HyperText Transfer Protocol），是一种广泛用于互联网中浏览器与服务器之间的应用层传输协议。简单来说，浏览器向服务器发送 HTTP 请求，服务器向浏览器返回 HTTP 响应，两者之间通过这种方式进行“交流”，来使得我们的浏览器可以正常从服务器端获取数据，并展示在用户的电脑屏幕上.</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221800080.png" alt="HTTP过程"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221800080.png" alt="HTTP过程"></p>
 <p>以访问 <a target="_blank" rel="noopener" href="http://httpbin.org/">http://httpbin.org</a> 网址为例，一个典型的 HTTP 请求如下所示：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Accept: text/html,...</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Host: httpbin.org</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.366</span><br></pre></td></tr></table></figure>
 
@@ -160,15 +160,15 @@
 <p>TLS 握手是干嘛呢？或者说为什么需要 TLS 握手呢？上面提到，在战场上，两个部队之间会提前约定好加密的方案，例如面对面用纸互相写下加密方案，然后在一段时间之内的电台通信统一用这个加密方案，这样能一定程度上保证电台通信的安全性。但是 TLS 中我们并没有这样一个“面对面”的机会，咱们总不可能在访问网页之前，人肉跑到服务器的维护者那边去跟他约定加密方案吧。出于这个目的，TLS 握手便出现了。所以我们可以说，TLS 握手的目的是给通信双方约定一个安全的加密方案（可以理解为商量一个只有双方知道的加密密钥）。</p>
 <p>知道了 TLS 握手的目的，接下来我们需要知道它具体是怎么做的。首先，我们肯定不能直接明文传输加密方案（密钥），不然这个密钥在传输过程中就直接被第三方获取了，那么加密将没有任何意义。也就是说，TLS 握手需要做到：<strong>通信双方可以约定一个共同的加密方案（密钥），并且这个约定的过程（即 TLS 握手过程），即使被任何第三方窃听到，也无法解析出这个加密方案（密钥）</strong>。</p>
 <p>是不是听起来很神奇，那到底是怎么做到的呢？这就不得不提到密码学中非常经典的两个概念：对称加密和非对称加密。</p>
-<h2 id="4-对称加密，非对称加密"><a href="#4-对称加密，非对称加密" class="headerlink" title="4.对称加密，非对称加密"></a>4.对称加密，非对称加密</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221807238.png" alt="对称加密"></p>
+<h2 id="4-对称加密，非对称加密"><a href="#4-对称加密，非对称加密" class="headerlink" title="4.对称加密，非对称加密"></a>4.对称加密，非对称加密</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221807238.png" alt="对称加密"></p>
 <p>对称加密是 TLS 握手成功后，通信双方之间采用的数据加密方案。现在的主要问题是：通信双方如何安全的商量好这个对称密钥，防止密钥被其他人窃取？</p>
 <p>这时就需要轮到非对称加密出场了。什么是非对称加密呢？与对称加密不同，非对称加密方案中，用户手握两把密钥，一把称为公钥，一把称为私钥，其中公&#x2F;私钥都可以用来加密&#x2F;解密数据，但是：<strong>用公钥加密后的数据，只有用私钥才能将其解开；用私钥加密后的数据，只有用公钥才能将其解开！</strong></p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808236.png" alt="非对称加密"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221808236.png" alt="非对称加密"></p>
 <p>这里只介绍了非对称加密的特点，并没有介绍其原理，因为这属于密码学的范畴了，展开来讲又是一篇文章。简单说说其思想吧，目前流行的非对称加密算法 RSA 基于的原理其实就一句话：我们目前还没有很好的办法对一个很大的数做因式分解，例如你在心里默默想一个很大的质数 p 和 质数 q，算出其乘积 n，那么向外公开 n 的话，外部人员是很难找出 p 和 q 的（只能暴力尝试，而当这样的数够大够多的时候，以现在的计算机算力也需要几百上千年的时间才能破解了）。对密码学感兴趣的同学，可自行进一步了解。</p>
 <p>有了非对称加密，事情就变得有意思起来了。见下图，服务器端用非对称加密方案生成一对公&#x2F;私钥，私钥掌握在自己手里，谁也不告诉；在 TLS 握手的过程中，服务器将自己的公钥交给浏览器端，浏览器端在心里默默想出一个对称加密的密钥后，将这个密钥用服务器端的公钥进行加密，然后再传回给浏览器端；浏览器端收到这个数据之后，用自己的私钥将其进行解密，就能够得到刚才浏览器心里默念的那个对称密钥了。这样这个问题就完美的解决了，两边可以心有灵犀的拿到这个对称密钥，而不用担心被任何第三方窃取到了。</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808264.png" alt="TLS过程模拟"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221808264.png" alt="TLS过程模拟"></p>
 <p>这就是 TLS 握手的过程吗？不，当然没这么简单了，我们还没有考虑一个非常巧妙的攻击手段：中间人攻击。</p>
-<h2 id="5-中间人攻击"><a href="#5-中间人攻击" class="headerlink" title="5.中间人攻击"></a>5.中间人攻击</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221808648.png" alt="中间人攻击"></p>
+<h2 id="5-中间人攻击"><a href="#5-中间人攻击" class="headerlink" title="5.中间人攻击"></a>5.中间人攻击</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221808648.png" alt="中间人攻击"></p>
 <p>假设现在我们从电脑上访问百度，如果有一个中间人在我的路由器端，或者运营商端，或者任何一个中间节点上截取了我的请求，刚不是提到服务器端需要返回给我们公钥吗，中间人他自己也生成一套公&#x2F;私钥，然后将自己的公钥返回给我，这样我就与中间人之间建立了一条我以为“安全”的连接了，此时我以为我连接的是百度服务器，其实我连接的是中间人…那么此时中间人可以做任何事情了，如果他人品比较好的话，他可以默默当一个代理，我要访问百度，他就去帮我访问百度，然后把结果返回给我，勤勤恳恳做一个“中间商”。当然，我们知道做这种攻击的人人品往往不会太好，所以他们可以做更坏的事情，例如伪造一个银行网页返回给我，让我填写账号和密码，这样的话…后果就不堪设想了。</p>
 <p>那么如何防止中间人攻击呢？其中的核心就是：<strong>我们需要保证我们访问的就是目标服务器，例如，当我们访问百度时，我们需要确保在 TLS 握手时，给我们公钥的人就是百度，而不是任何其他人。</strong></p>
 <p>那么这个应该如何去保证呢？这就不得不提到接下来的几个概念了，数字证书，以及证书权威机构（Certificate Authority，简称 CA）。</p>
@@ -178,8 +178,8 @@
 
 <p>下面会一一回答这几个问题。正式回答之前，先来看看数字证书里究竟有哪些内容。</p>
 <p>既然上面提到百度，我们就以百度为例，我们使用浏览器访问百度，可以在地址栏左边看到一个小锁，点击后，就可以查看百度的数字证书</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809371.png" alt="百度安全证书1"></p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221809332.png" alt="百度安全证书2"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221809371.png" alt="百度安全证书1"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221809332.png" alt="百度安全证书2"></p>
 <p>图中可以看到该证书的一些基本信息：</p>
 <ul>
 <li>颁发对象：这个证书是颁发给百度的，并且只对域名 (www.)baidu.com 有效</li>
@@ -199,14 +199,14 @@
 <p>我们知道合同上的签名是靠笔迹鉴定来确认真伪的，很明显这一长串字符里没有笔迹，那它是如何保证该签名是 CA 颁发的，而不是被其他人伪造的呢？</p>
 <p>上面我们提到，每一张数字证书有一个指纹，是将整张证书经过哈希运算后得到的特征值。CA 作为权威机构，其本身也是有一对公钥&#x2F;私钥的，它在颁发数字证书的时候，会用自己的私钥对证书的指纹进行加密，生成的这段加密数据，就是该证书的签名了！那么我们浏览器是如何验证证书的真伪呢？我们只需要使用 CA 的公钥对签名进行解密，看看得到的值是不是跟证书的指纹是一样的，这样就 OK 了，只要是一样，说明这个证书一定是 CA 颁发的。</p>
 <p>那么，又有问题来了：我们浏览器是从哪里拿到 CA 的公钥呢？总不能还是通过网络传输吧，这样就有“套娃”的中间人攻击风险了。所以啊，我们的浏览器或操作系统已经内置了世界权威的 CA 的数字证书（证书里就包含了其公钥）了，点击浏览器的 设置 -&gt; 隐私设置和安全性 -&gt; 安全 -&gt; 管理设备证书，可以查看当前系统内置的所有 CA 证书。</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814709.png" alt="CA证书"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221814709.png" alt="CA证书"></p>
 <p>上图是我的电脑中内置的 CA 证书。刚刚提到了百度的数字证书是由 GlobalSign 颁发的，这里也可以验证，GlobalSign 是被我们的操作系统所信任的 CA，并且我们已经将它的证书内置在操作系统中了。因此现在我们可以认定说，这个证书是值得信任的，与我们建立连接的就是百度，不是别人。</p>
 <p>你可能会想，如果中间人将百度真实的数字证书返回给我呢？中间人是没有百度的私钥的，所以当我们提取出证书中的公钥，并对心里想的密钥进行加密后，中间人是解不开这个密钥的，所以中间人无论如何也无法与我们建立连接。</p>
 <p>好了，数字证书的内容已经全部讲述完毕了，最后回过头来复习下前面提到的两个问题：</p>
 <div class="tag-plugin colorful note" ><div class="body"><ol><li>数字证书如何保证自身不会被伪造？</li></ol><p>数字证书中有一段签名，该签名是 CA 使用其私钥对证书指纹进行加密后得到的值，我们浏览器使用 CA 的公钥对该签名进行解密后，与该证书的指纹进行对比，就可以知道证书是否被篡改或者伪造了。</p><p>当然，这里要多提一嘴，我们作为客户端，需要保证自己的电脑里保存的都是值得信任的 CA 根证书，因为信任某 CA 就代表信任了该 CA 颁发的所有数字证书，如果有人&#x2F;软件想在你的电脑里安装来历不明的 CA 证书，那你就要保持警惕了…</p><ol start="2"><li>如果中间人直接把真实的数字证书返回给我，它能够成功与我建立连接吗？</li></ol><p>答案是不行的。这个问题其实比较简单，刚刚提到，服务器端除了公钥外，自身还保存有一份私钥的，而中间人是拿不到这个私钥的，因为它被服务器雪藏起来，不会发送到互联网中的…那么如果中间人用服务器的证书返回给用户，用户采用服务器的公钥对自身默念出来的对称密钥进行加密后，返回给中间人的时候，中间人就一脸懵逼了，因为这个密钥它解不开呀，它没有私钥的，所以这个问题就完美解决了。</p></div></div>
 
 
-<h2 id="7-TLS握手的具体过程"><a href="#7-TLS握手的具体过程" class="headerlink" title="7.TLS握手的具体过程"></a>7.TLS握手的具体过程</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410221814264.png" alt="TLS握手过程"></p>
+<h2 id="7-TLS握手的具体过程"><a href="#7-TLS握手的具体过程" class="headerlink" title="7.TLS握手的具体过程"></a>7.TLS握手的具体过程</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410221814264.png" alt="TLS握手过程"></p>
 <p>上图来自 <a target="_blank" rel="noopener" href="http://www.ssl.com/">www.ssl.com</a> ，展示了整个握手流程，我用大白话解释一下：</p>
 <p>客户端向服务器发送 Client Hello 信息，告知自己想要建立一条 TLS 连接，并告知自己支持的加密算法。</p>
 <p>服务器向客户端发送一个 Server Hello 的回应，并选择一个加密算法，同时给客户端发送自己的数字证书（包含服务器的公钥）。</p>
@@ -230,18 +230,18 @@
 <li><p>然后搜索“SSL证书”，找到“SSL证书”，点击“创建证书”，然后按照提示填写好信息，点击“确定”。</p>
 </li>
 </ul>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231146786.png" alt="SSL证书"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231146786.png" alt="SSL证书"></p>
 <p>每个服务器供应商都会提供免费的SSL证书，你可以选择免费的证书，也可以选择付费的证书。</p>
 <ul>
 <li>按流程添加DNS解析并等待证书生成即可。</li>
 <li>证书生成后点击下载并解压到本地</li>
 </ul>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231151095.png" alt="下载证书"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231151095.png" alt="下载证书"></p>
 <p>解压文件后，将其中以.key和.crt结尾的文件打开并复制到Nginx的配置文件中。</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231154147.png" alt="解压文件"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231154147.png" alt="解压文件"></p>
 <p>我是用的是宝塔面板进行配置的，在“网站”中找到你的网站，点击“设置”–&gt;“SSL”，然后点击“上传证书”，将刚才复制的文件粘贴进去即可。</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231159137.png" alt="宝塔面板"></p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/GEM-Jay/images/zargo_blog/202410231202295.png" alt="上传证书"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231159137.png" alt="宝塔面板"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://zargo-1304316935.cos.ap-guangzhou.myqcloud.com/image/202410231202295.png" alt="上传证书"></p>
 <p>之后你就可以用HTTPS访问你的网站了!</p>
 
 <div class="article-footer fs14">
